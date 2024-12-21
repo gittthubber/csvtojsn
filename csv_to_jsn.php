@@ -2,12 +2,11 @@
 
 // CSV to JSON Converter - Convert CSV file to JSON
 function csvToJson($csvFile, $jsonFile, $delimiter = ',', $enclosure = '"', $escape = '\\', $debug = false) {
-    // Check if the CSV file exists and is readable
+    
     if (!file_exists($csvFile) || !is_readable($csvFile)) {
         return "Errore: il file CSV non esiste o non è leggibile.";
     }
 
-    // Check if the JSON file directory is writable
     if (!is_writable(dirname($jsonFile))) {
         return "Errore: impossibile scrivere il file JSON nella directory specificata.";
     }
@@ -26,7 +25,6 @@ function csvToJson($csvFile, $jsonFile, $delimiter = ',', $enclosure = '"', $esc
 
         $rowCount = 0;
         while ($row = fgetcsv($handle, 0, $delimiter, $enclosure, $escape)) {
-            // Ensure the number of values matches the number of headers
             if (count($headers) === count($row)) {
                 $data[] = array_combine($headers, $row);
             } else {
@@ -40,7 +38,6 @@ function csvToJson($csvFile, $jsonFile, $delimiter = ',', $enclosure = '"', $esc
         }
         fclose($handle);
 
-        // Write JSON file with error handling
         $jsonOptions = JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE;
         if (file_put_contents($jsonFile, json_encode($data, $jsonOptions)) === false) {
             return "Errore: impossibile scrivere il file JSON.";
